@@ -14,8 +14,6 @@ const feedbackInfoJSON = {
 const onInputChange = (e) => {
     e.preventDefault();
 
-    console.log(e);
-
     if (e.target.name === 'message') {
         feedbackInfoJSON.message = e.target.value;
     } else if (e.target.name === 'email') {

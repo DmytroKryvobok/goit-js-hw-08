@@ -6,30 +6,30 @@ const refs = {
     message: document.querySelector('textarea'),
 }
 
-const feedbackInfoJSON = {
-    email: '',
-    message: ''
-};
-
 const onInputChange = (e) => {
     e.preventDefault();
 
-    if (e.target.name === 'message') {
-        feedbackInfoJSON.message = e.target.value;
-    } else if (e.target.name === 'email') {
-        feedbackInfoJSON.email = e.target.value;
-    }
+    if (e.currentTarget.elements) {
+        const formEl = e.currentTarget.elements;
+    
+        const email = formEl.email.value;
+        const message = formEl.message.value;
 
-    localStorage.setItem("feedback-form-state", JSON.stringify(feedbackInfoJSON));
-    console.log(feedbackInfoJSON);  
+        const feedbackData = {
+            email,
+            message
+        }
+
+        localStorage.setItem("feedback-form-state", JSON.stringify(feedbackData));
+        console.log(feedbackData);
+    }
 }
 
-const feedbackInfoParse = JSON.parse(localStorage.getItem("feedback-form-state"));
-console.log(feedbackInfoParse);
+const feedbackDataParse = JSON.parse(localStorage.getItem("feedback-form-state"));
 
-if (feedbackInfoParse) {
-    refs.input.value = feedbackInfoParse.email;
-    refs.message.value = feedbackInfoParse.message;
+if (feedbackDataParse) {
+    refs.input.value = feedbackDataParse.email;
+    refs.message.value = feedbackDataParse.message;
 }    
 
 const onClickSubmit = (e) => {
@@ -39,13 +39,11 @@ const onClickSubmit = (e) => {
     const data = { email: email.value, message: message.value };
     console.log(data);
     
-    localStorage.clear();
+    localStorage.removeItem("feedback-form-state");
     
     email.value = '';
     message.value = '';
 }
-
-console.log(localStorage);
 
 refs.form.addEventListener('input', throttle(onInputChange, 500));
 refs.form.addEventListener('submit', onClickSubmit);
